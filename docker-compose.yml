@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+   express-app:
+      build:
+         context: ./server
+      container-name: expressserver
+      hostname: expressserver
+      ports:
+         - "3000:3000"
+      network:
+         - backend-net
+      depends-on:
+         - db
+   db:
+     container-name: mongo-db
+     image: mongo
+     volumes:
+       - .data:/data/db
+     ports:
+       - "27017:27017"
+     network:
+       - backend-net
+
+   webserver:
+     build:
+       context: ./nginx
+     container-name: webserver
+     hostname: webserver
+     ports:
+       - "80:80"
+     depends_on:
+       - express-app
+     network:
+       - backend-net
+    
+networks:
+  backend-net:
+    external:true
