@@ -8,12 +8,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Build docker image') {
-            steps {
-                sh 'docker build -t backend .'
-            }
-        }
         stage('run docker container') {
             steps {
                 sh 'docker-compose up'
